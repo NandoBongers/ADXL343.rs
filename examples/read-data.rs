@@ -32,45 +32,13 @@ fn main() -> ! {
     let scl: PA9<AlternateOD<AF4>> = gpioa.pa9.into_alternate_open_drain();
 
     let mut i2c = dp.I2C2.i2c(sda, scl, Config::new(40.khz()), &mut rcc);
-    let mut test = Adxl343::new(i2c);
-    
-    
+    let mut sensor = Adxl343::new(i2c).unwrap();
 
-    //let reg = adxl343::Adxl343::Register;
-   // let buf: &mut [u8];
-    //reg = Register::DATAX0;
-    //let mut DATA = Adxl343::write_read_register(&test, reg, buf);
+    loop {
+        let mut accel = sensor.accel_raw().unwrap();
 
-
-
-
-
-    //let mut hallo: &mut Adxl343<I2C2>;
-
-    
-    //let mut data = Adxl343::accel_raw(hallo);
-
-    //let mut reg: Register;
-    //reg.addr() = 0x32;
-    //let mut res: &mut [u8];
-    //TODO use register
-    //let mut DATAX0 = Adxl343::write_read_register(&mut self, reg, &mut res);
-    //let mut DATAX= Adxl343::write_read_u16(&test, register::Register.);
-
-    //0x32 DATA_X0 R DATA_X0[7:0]
-    /*   
-    0x33 DATA_X1 R DATA_X1[7:0] 0x00
-    0x34 DATA_Y0 R DATA_Y0[7:0] 0x00
-    0x35 DATA_Y1 R DATA_Y1[7:0] 0x00
-    0x36 DATA_Z0 R DATA_Z0[7:0] 0x00
-    0x37 DATA_Z1 R DATA_Z1[7:0] 0x00
-    */
-    
-
-    /*
-    let buf: [u8; 5] = [0, 1, 2, 3, 4];
-    i2c.write(0x1d, &buf).unwrap();
-    */
-
-    loop {}
+        let x = accel.x;
+        let y = accel.y;
+        let z = accel.z;
+    }
 }
